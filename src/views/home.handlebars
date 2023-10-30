@@ -1,0 +1,18 @@
+<h1>home</h1>
+<h2>bienvenido {{usuario}}</h2>
+<h2>list all products</h2>
+<div>
+    {{#each dbProducts}}
+
+    <div>
+        <h3>{{title}}</h3>
+        <p> price: ${{price}} </p>
+        <p> category: {{cat}} </p>
+        
+        <a href="/api/products/{{_id}}">detail...</a>
+    </div>
+
+      
+    {{/each}}
+
+</div>

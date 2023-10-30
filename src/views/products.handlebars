@@ -1,0 +1,37 @@
+
+
+
+
+<div class="products-header">
+ <h2>Bienvenido {{user.first_name}} </h2><br>
+<h6>has accedido como {{user.role}}</h6>
+<a href="/logout">logout</a> 
+</div>
+
+<div>
+    {{#each dbProducts}}
+
+    <div >
+        <h3>{{title}}</h3>
+        <p> price: ${{price}} </p>
+        <p> category: {{cat}} </p>
+        
+        <a href="/api/products/{{_id}}">detail...</a>
+    </div>
+
+      
+    {{/each}}
+
+{{#if hasPreviousPage}}
+  <a href="/products?page={{previousPage}}&limit={{limit}}">previous</a>
+{{/if}}
+{{#if hasNextPage}}
+  <a href="/products?page={{nextPage}}&limit={{limit}}">next</a>
+{{/if}}
+
+
+
+
+
+
+</div>
