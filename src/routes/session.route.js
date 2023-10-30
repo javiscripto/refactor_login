@@ -1,25 +1,15 @@
 import { Router } from "express";
 import UserManager from "../DAO/managers/usersManager.js";
-import bcrypt from "bcrypt";
+import { createHash } from "../../utils.js";
 
 
-//funcion para hashear la contraseña antes de guardarla en mongo 
-const hashPassword= async(user)=>{
-    try {
-        const hash = await bcrypt.hash(user.password,10);
-        user.password=hash;
-        return user
-    } catch (error) {
-        throw error
-    }
-}
+
 
 
 
 const route= Router()
 const manager = new UserManager()
 
-//instancia del manager de usuarios
 
 
 // register/create new user
@@ -30,7 +20,18 @@ route.get("/register", ( req, res)=>{
 })
 
 route.post("/register", async( req, res)=>{
-    const user=req.body
+
+    const {first_name,last_name,email,age,password}=req.body;
+    
+    if(!first_name||!last_name||!email||!age)return res.status(400).send("faltan datos");
+
+    const user={
+        first_name,
+        last_name,
+        email,
+        age,
+        password: createHash(password)
+    }
     await manager.register(user)
     //si se proporciona un usuario, este será almacenado en la base de datos y se redireccionará al endpoint login
     
