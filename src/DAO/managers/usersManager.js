@@ -1,12 +1,13 @@
+import { isValidPass } from "../../../utils.js";
 import userModel from "../models/users.model.js";
 
 export default class UserManager{
     constructor(){};
 
-    register= async(userData)=>{
+    register= async(userData,password)=>{
         try {
             let user;
-            if(userData.email=="adminCoder@coder.com"&&userData.password=="adminCod3r123"){
+            if(userData.email=="adminCoder@coder.com"&&password=="adminCod3r123"){
                  user = {...userData,role:"admin"}
             }else{
                 user={...userData,role:"user"}
@@ -23,9 +24,9 @@ export default class UserManager{
     login=async( credentials)=>{
         try {
             const { email, password } = credentials;
-            const user = await userModel.findOne({ email, password }).lean();
+            const user = await userModel.findOne({ email }).lean();
 
-            if (user) {
+            if (user&& isValidPass(user,password)) {
                 return [true, user]
             } else {
                 return [false, null]

@@ -1,6 +1,6 @@
 import { Router } from "express";
 import UserManager from "../DAO/managers/usersManager.js";
-import { createHash } from "../../utils.js";
+import { createHash, isValidPass  } from "../../utils.js";
 
 
 
@@ -32,7 +32,7 @@ route.post("/register", async( req, res)=>{
         age,
         password: createHash(password)
     }
-    await manager.register(user)
+    await manager.register(user, req.body.password)
     //si se proporciona un usuario, este será almacenado en la base de datos y se redireccionará al endpoint login
     
 
