@@ -7,6 +7,8 @@ import MongoStore from "connect-mongo";
 import {fileURLToPath} from "url";
 import path from "path";
 
+import passport from "passport";
+
 const __filename=fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename)
 

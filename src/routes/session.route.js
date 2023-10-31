@@ -1,6 +1,9 @@
 import { Router } from "express";
 import UserManager from "../DAO/managers/usersManager.js";
 import { createHash, isValidPass  } from "../../utils.js";
+import passport from "passport";
+import  initializePassport  from "../config/passport.config.js";
+import userModel from "../DAO/models/users.model.js";
 
 
 
@@ -9,10 +12,51 @@ import { createHash, isValidPass  } from "../../utils.js";
 
 const route= Router()
 const manager = new UserManager()
+initializePassport()
+
+
+//prueba de passport
+route.post("/reg", passport.authenticate("register",{failureRedirect:"/failRegister"}), async(req, res)=>{
+    res.send({status: "success", message:"usuario registrado"})
+})
+
+route.get("/failRegister", async(req, res)=>{
+    console.log(`falla en el registro`)
+    res.send({error:"fallo el registro"})
+})
+
+
+route.post("/log", passport.authenticate("login", { failureRedirect: "/faillogin" }), async (req, res) => {
+    if (!req.user) return res.status(400).send({ status: "error", error: "credencial invalida" })
+    req.session.user = {
+        first_name: req.user.first_name,
+        last_name: req.user.last_name,
+        email: req.user.last_name,
+        age: req.user.age
+    }
+    res.send({ status: "success", payload: req.user })
+})
+
+
+route.get("/faillogin", (req, res)=>{
+    res.send("algo fallo")
+})
 
 
 
-// register/create new user
+passport.serializeUser((user, done)=>{
+    done(null, user.id)
+})
+
+passport.deserializeUser(async(id, done)=>{
+    let user= await userModel.findById(id);
+    done(null, user)
+})
+
+
+
+
+// register/create new user ////////////////////////////////////////////////
 
 
 route.get("/register", ( req, res)=>{
