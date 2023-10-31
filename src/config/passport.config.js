@@ -74,7 +74,7 @@ const initializePassport = () => {
         if(!user){
           let newUser={
             first_name:profile._json.name,
-            las_name:"",
+            last_name:"",
             age:18,
             email:profile._json.email,
             password:""
