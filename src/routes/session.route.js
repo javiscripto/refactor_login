@@ -77,7 +77,7 @@ route.post("/register", async( req, res)=>{
         password: createHash(password)
     }
     await manager.register(user, req.body.password)
-    //si se proporciona un usuario, este será almacenado en la base de datos y se redireccionará al endpoint login
+    //si se proporciona un usuario, este será almacenado en la base de datos y se redireccionará al login
     
 
     if(user)res.redirect("/login")
@@ -111,7 +111,14 @@ route.post("/login", async (req, res) => {
     }
 });
 
+//login con github
+route.get("/api/sessions/github", passport.authenticate("github",{scope:["user:email"]}), async(req, res)=>{})
 
+// callback
+route.get("/api/sessions/githubcallback",  passport.authenticate("github", {failureRedirect:"/register"})  , async(req, res)=>{
+    req.session.user=req.user;
+    res.redirect("/products")
+})
 
 
 
